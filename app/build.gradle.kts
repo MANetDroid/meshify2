@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.manetdroid.meshify2"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.manetdroid.meshify2"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
