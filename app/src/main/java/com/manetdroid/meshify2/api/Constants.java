@@ -3,6 +3,8 @@ package com.manetdroid.meshify2.api;
 public class Constants {
 
     public static final int DEFAULT_ERROR_CODE = 100;
+    public static final int KEY_PAIR_GENERATION = -324;
+    public static final String ERROR_KEY_PAIR_GENERATION = "Error generating key pair";
     public static final int BLE_NOT_SUPPORTED = -135;
     public static final String BLE_NOT_SUPPORTED_STRING = "BLE is not supported";
     public static final int INSUFFICIENT_PERMISSIONS = -246;

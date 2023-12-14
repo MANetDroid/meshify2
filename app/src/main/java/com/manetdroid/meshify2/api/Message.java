@@ -173,7 +173,7 @@ public class Message implements Parcelable {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj != null && obj instanceof Message) {
+        if (obj instanceof Message) {
             return ((Message) obj).getUuid() != null && ((Message) obj).getUuid().trim().equalsIgnoreCase(this.getUuid().trim());
         }
         throw new IllegalArgumentException(obj.getClass().getCanonicalName() + " is not a instance of " + Message.class.getName());

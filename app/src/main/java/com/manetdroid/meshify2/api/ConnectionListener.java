@@ -1,8 +1,5 @@
 package com.manetdroid.meshify2.api;
 
-import com.manetdroid.meshify2.api.Device.Device;
-import com.manetdroid.meshify2.api.Session.Session;
-
 /**
  * This interface allows defining callback functions for the connection process.
  */
