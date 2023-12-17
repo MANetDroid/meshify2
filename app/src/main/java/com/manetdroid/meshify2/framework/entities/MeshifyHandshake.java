@@ -68,7 +68,7 @@ public class MeshifyHandshake implements Parcelable {
 
     @Override
     public String toString() {
-        return new Gson().toJson((Object) this);
+        return new Gson().toJson(this);
     }
 
     @Override
@@ -79,6 +79,6 @@ public class MeshifyHandshake implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.rq);
-        dest.writeParcelable((Parcelable) this.rp, flags);
+        dest.writeParcelable(this.rp, flags);
     }
 }
