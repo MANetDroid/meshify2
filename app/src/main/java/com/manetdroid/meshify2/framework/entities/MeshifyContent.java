@@ -2,7 +2,9 @@ package com.manetdroid.meshify2.framework.entities;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import com.google.gson.Gson;
+
 import java.util.HashMap;
 
 /**
@@ -10,9 +12,22 @@ import java.util.HashMap;
  */
 public class MeshifyContent implements Parcelable {
 
+    /**
+     * Parcelable creator for generating instances of MeshifyContent from a Parcel.
+     */
+    public static final Creator<MeshifyContent> CREATOR = new Creator<MeshifyContent>() {
+        @Override
+        public MeshifyContent createFromParcel(Parcel in) {
+            return new MeshifyContent(in);
+        }
+
+        @Override
+        public MeshifyContent[] newArray(int size) {
+            return new MeshifyContent[size];
+        }
+    };
     // Payload data stored as a HashMap with String keys and Object values
     private final HashMap<String, Object> payload;
-
     // Unique identifier for the MeshifyContent
     private String id;
 
@@ -37,21 +52,6 @@ public class MeshifyContent implements Parcelable {
         // Read payload as a HashMap from the Parcel
         payload = in.readHashMap(getClass().getClassLoader());
     }
-
-    /**
-     * Parcelable creator for generating instances of MeshifyContent from a Parcel.
-     */
-    public static final Creator<MeshifyContent> CREATOR = new Creator<MeshifyContent>() {
-        @Override
-        public MeshifyContent createFromParcel(Parcel in) {
-            return new MeshifyContent(in);
-        }
-
-        @Override
-        public MeshifyContent[] newArray(int size) {
-            return new MeshifyContent[size];
-        }
-    };
 
     /**
      * Provides a description of the contents (required for Parcelable).
