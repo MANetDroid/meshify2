@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class Message implements Parcelable {
 
-    private HashMap content;
+    private HashMap<String, Object> content;
 
     private String receiverId;
 
@@ -110,7 +110,7 @@ public class Message implements Parcelable {
         }
     }
 
-    public HashMap getContent() {
+    public HashMap<String, Object> getContent() {
         return content;
     }
 
@@ -146,7 +146,7 @@ public class Message implements Parcelable {
         return isMesh;
     }
 
-    public void setContent(HashMap content) {
+    public void setContent(HashMap<String, Object> content) {
         this.content = content;
     }
 
