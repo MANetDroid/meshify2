@@ -13,15 +13,15 @@ import java.util.UUID;
 
 public class Message implements Parcelable {
 
-    private HashMap<String, Object> content;
+    private HashMap content;
 
     private String receiverId;
 
     private String senderId;
 
-    private final String uuid;
+    private String uuid;
 
-    private final long dateSent;
+    private long dateSent;
 
     private byte[] data;
 
@@ -29,7 +29,7 @@ public class Message implements Parcelable {
 
     private int hop;
 
-    private final int hops = 0;
+    private int hops = 0;
 
     public Message(HashMap<String, Object> content, String receiverId, String senderId, boolean mesh, int hop) {
         this.content = content;
@@ -110,7 +110,7 @@ public class Message implements Parcelable {
         }
     }
 
-    public HashMap<String, Object> getContent() {
+    public HashMap getContent() {
         return content;
     }
 
@@ -146,12 +146,16 @@ public class Message implements Parcelable {
         return isMesh;
     }
 
-    public void setContent(HashMap<String, Object> content) {
+    public void setContent(HashMap content) {
         this.content = content;
     }
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    public void setDateSent(long dateSent) {
+        this.dateSent = dateSent;
     }
 
     public void setMesh(boolean mesh) {
@@ -166,6 +170,10 @@ public class Message implements Parcelable {
         this.senderId = senderId;
     }
 
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     public String serialize() {
         return new Gson().toJson(this);
     }
@@ -173,7 +181,7 @@ public class Message implements Parcelable {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj instanceof Message) {
+        if (obj != null && obj instanceof Message) {
             return ((Message) obj).getUuid() != null && ((Message) obj).getUuid().trim().equalsIgnoreCase(this.getUuid().trim());
         }
         throw new IllegalArgumentException(obj.getClass().getCanonicalName() + " is not a instance of " + Message.class.getName());
