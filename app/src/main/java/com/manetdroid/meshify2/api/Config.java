@@ -8,7 +8,7 @@ public class Config {
     private final boolean isEncryption;
     private final boolean isVerified;
     private final boolean neighborDiscovery;
-    private final Antenna antennaType;
+    private Antenna antennaType;
     private final ConfigProfile configProfile;
     private final int maxConnectionRetries;
     private final boolean isAutoConnect;
@@ -80,7 +80,9 @@ public class Config {
         BLUETOOTH_LE,
         UNREACHABLE
     }
-
+    public void setAntennaType(Antenna antennaType) {
+        this.antennaType = antennaType;
+    }
     /**
      * Builder class for constructing Config instances.
      */
