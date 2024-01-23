@@ -27,6 +27,12 @@ public class ConnectionSubscriber extends DisposableSubscriber<Device> {
     public ConnectionSubscriber() {
     }
 
+    private static void isAutoConnect() {
+        if (Meshify.getInstance().getConfig().isAutoConnect()) {
+            throw new MeshifyException(100, "Meshify is configured to auto connect.");
+        }
+    }
+
     @Override
     protected void onStart() {
         Log.d(TAG, "onStart: ");
@@ -36,7 +42,7 @@ public class ConnectionSubscriber extends DisposableSubscriber<Device> {
 
     @Override
     public void onNext(Device device) {
-        Log.d(TAG, "onNext: device: " + device + " | onThread: " +  Thread.currentThread().getName());
+        Log.d(TAG, "onNext: device: " + device + " | onThread: " + Thread.currentThread().getName());
 
         MeshifyDevice meshifyDevice = ConnectionManager.getConnectivity(device);
 
@@ -73,7 +79,7 @@ public class ConnectionSubscriber extends DisposableSubscriber<Device> {
             } else {
                 Log.e(TAG, "isAutoConnect: " + Meshify.getInstance().getConfig().isAutoConnect());
 //                if ( Meshify.getInstance().getConfig().isAutoConnect() ) {
-                    meshifyDevice.create().subscribeOn(Schedulers.newThread()).subscribe(completableObserver); //completableObserver subscribes meshifyDevice on a new thread
+                meshifyDevice.create().subscribeOn(Schedulers.newThread()).subscribe(completableObserver); //completableObserver subscribes meshifyDevice on a new thread
 //                }
             }
 
@@ -81,12 +87,6 @@ public class ConnectionSubscriber extends DisposableSubscriber<Device> {
             request(1L);
         }
 
-    }
-
-    private static void isAutoConnect() {
-        if (Meshify.getInstance().getConfig().isAutoConnect()) {
-            throw new MeshifyException(100, "Meshify is configured to auto connect.");
-        }
     }
 
     @SuppressLint("MissingPermission")

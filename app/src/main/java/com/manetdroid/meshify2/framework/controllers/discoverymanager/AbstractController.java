@@ -6,7 +6,7 @@ import com.manetdroid.meshify2.framework.exceptions.ConnectionException;
 
 abstract class AbstractController {
 
-    AbstractController(){
+    AbstractController() {
 
     }
 

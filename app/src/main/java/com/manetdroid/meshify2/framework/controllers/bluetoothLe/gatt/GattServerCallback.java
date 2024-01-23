@@ -1,5 +1,6 @@
 package com.manetdroid.meshify2.framework.controllers.bluetoothLe.gatt;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -24,6 +25,7 @@ public class GattServerCallback extends BluetoothGattServerCallback {
     public GattServerCallback() {
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onConnectionStateChange(BluetoothDevice device, int status, int newState) {
         super.onConnectionStateChange(device, status, newState);

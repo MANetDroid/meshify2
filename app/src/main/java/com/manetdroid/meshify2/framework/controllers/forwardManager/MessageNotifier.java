@@ -29,8 +29,7 @@ class MessageNotifier {
      * @param message The received direct message.
      */
     void onMessageReceived(Message message) {
-        new Handler(Looper.getMainLooper()).post(() ->
-                Meshify.getInstance().getMeshifyCore().getMessageListener().onMessageReceived(message));
+        new Handler(Looper.getMainLooper()).post(() -> Meshify.getInstance().getMeshifyCore().getMessageListener().onMessageReceived(message));
     }
 
     /**
@@ -39,8 +38,7 @@ class MessageNotifier {
      * @param message The received broadcast message.
      */
     void onBroadcastMessageReceived(Message message) {
-        new Handler(Looper.getMainLooper()).post(() ->
-                Meshify.getInstance().getMeshifyCore().getMessageListener().onBroadcastMessageReceived(message));
+        new Handler(Looper.getMainLooper()).post(() -> Meshify.getInstance().getMeshifyCore().getMessageListener().onBroadcastMessageReceived(message));
     }
 
     /**
@@ -50,7 +48,6 @@ class MessageNotifier {
      * @param messageException The exception indicating the cause of the delivery failure.
      */
     void onMessageFailed(Message message, MessageException messageException) {
-        new Handler(Looper.getMainLooper()).post(() ->
-                Meshify.getInstance().getMeshifyCore().getMessageListener().onMessageFailed(message, messageException));
+        new Handler(Looper.getMainLooper()).post(() -> Meshify.getInstance().getMeshifyCore().getMessageListener().onMessageFailed(message, messageException));
     }
 }

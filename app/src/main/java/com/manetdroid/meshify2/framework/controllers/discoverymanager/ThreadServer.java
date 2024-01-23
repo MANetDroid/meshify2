@@ -7,10 +7,8 @@ import com.manetdroid.meshify2.framework.exceptions.ConnectionException;
 
 public abstract class ThreadServer<SOCKET, SERVER_SOCKET> extends Thread { //can be of type socket or server socket
 
-    protected Context context;
-
     public final String TAG = getClass().getCanonicalName();
-
+    protected Context context;
     private SERVER_SOCKET server_socket;
 
     private boolean isRunning = false;
@@ -33,12 +31,12 @@ public abstract class ThreadServer<SOCKET, SERVER_SOCKET> extends Thread { //can
         this.server_socket = server_socket;
     }
 
-    public void setRunning(boolean b) {
-        this.isRunning = b;
-    }
-
     public boolean isRunning() {
         return this.isRunning;
+    }
+
+    public void setRunning(boolean b) {
+        this.isRunning = b;
     }
 
 }

@@ -74,6 +74,7 @@ public class MeshifyReceiver extends BroadcastReceiver {
         intentFilter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
     }
 
+    @SuppressLint("SoonBlockedPrivateApi")
     private void addBluetoothActions(IntentFilter intentFilter) {
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         intentFilter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -115,7 +116,6 @@ public class MeshifyReceiver extends BroadcastReceiver {
                 this.bluetoothController = new BluetoothController(context, config);
             }
         }
-
     }
 
     public void startServer(Config.Antenna antenna) {
@@ -135,7 +135,6 @@ public class MeshifyReceiver extends BroadcastReceiver {
             try {
                 this.bluetoothController.startServer(this.context);
             } catch (ConnectionException e) {
-
             }
         }
     }

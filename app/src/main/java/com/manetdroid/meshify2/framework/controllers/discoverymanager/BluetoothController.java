@@ -24,26 +24,16 @@ import com.manetdroid.meshify2.logs.Log;
 
 public class BluetoothController extends AbstractController {
 
-    private static String TAG = "[Meshify][BluetoothController]";
-
     public static int state = 0; // BLE Advertising state
-
-    private Config config;
-
-    private Context context;
-
-    private BluetoothDiscovery bluetoothDiscovery;
-
-    private ThreadServer threadServer;
-
-    private BluetoothLeDiscovery bluetoothLeDiscovery;
-
-    private ThreadServer threadServerBle;
-
-    private boolean isBLE = true; // BLE support check
-
+    private static String TAG = "[Meshify][BluetoothController]";
     private static GattManager gattManager;
-
+    private Config config;
+    private Context context;
+    private BluetoothDiscovery bluetoothDiscovery;
+    private ThreadServer threadServer;
+    private BluetoothLeDiscovery bluetoothLeDiscovery;
+    private ThreadServer threadServerBle;
+    private boolean isBLE = true; // BLE support check
     private MeshifyAdvertiseCallback advertiseCallback;
 
     private BluetoothAdapter bluetoothAdapter;
@@ -52,7 +42,7 @@ public class BluetoothController extends AbstractController {
     public BluetoothController(Context context, Config config) throws MeshifyException {
         this.context = context;
         this.config = config;
-        switch (this.getConfig().getAntennaType()){
+        switch (this.getConfig().getAntennaType()) {
             case BLUETOOTH_LE: {
                 this.hardwareCheck();
             }
@@ -62,10 +52,14 @@ public class BluetoothController extends AbstractController {
         }
     }
 
+    public static GattManager getGattManager() {
+        return gattManager;
+    }
+
     private void hardwareCheck() throws MeshifyException {
         if (!getContext().getPackageManager().hasSystemFeature("android.hardware.bluetooth_le")) {
             this.isBLE = false;
-            switch (this.getConfig().getAntennaType()){
+            switch (this.getConfig().getAntennaType()) {
                 case BLUETOOTH_LE: {
                     Log.e(TAG, "Bluetooth Low Energy not supported.");
                     getConfig().setAntennaType(Config.Antenna.UNREACHABLE);
@@ -93,6 +87,7 @@ public class BluetoothController extends AbstractController {
         }
     }
 
+    @SuppressLint("MissingPermission")
     public boolean startAdvertising(String userUuid) throws IllegalStateException {
 
         if (state != 3) {
@@ -103,7 +98,7 @@ public class BluetoothController extends AbstractController {
             }
             try {
 
-                if (this.bluetoothAdapter != null && this.bluetoothAdapter.getBluetoothLeAdvertiser() != null && this.threadServerBle != null && this.threadServerBle.getServerSocket() != null ) {
+                if (this.bluetoothAdapter != null && this.bluetoothAdapter.getBluetoothLeAdvertiser() != null && this.threadServerBle != null && this.threadServerBle.getServerSocket() != null) {
                     AdvertiseSettings advertiseSettings = BluetoothUtils.getAdvertiseSettings();
                     AdvertiseData advertiseData = BluetoothUtils.getAdvertiseData(userUuid);
                     BluetoothLeAdvertiser bluetoothLeAdvertiser = this.bluetoothAdapter.getBluetoothLeAdvertiser();
@@ -119,12 +114,10 @@ public class BluetoothController extends AbstractController {
                 }
                 state = 1;
                 return false;
-            }
-            catch (IllegalStateException il) {
+            } catch (IllegalStateException il) {
                 state = 0;
-                return  false;
-            }
-            catch (Exception e) {
+                return false;
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
@@ -134,8 +127,6 @@ public class BluetoothController extends AbstractController {
         return false;
 
     }
-
-
 
     private void disconnectDevices() {
         switch (this.getConfig().getAntennaType()) {
@@ -183,7 +174,7 @@ public class BluetoothController extends AbstractController {
             return;
         } else {
             this.bluetoothAdapter.cancelDiscovery();
-            BluetoothDiscovery bluetoothDiscovery =  new BluetoothDiscovery(context);
+            BluetoothDiscovery bluetoothDiscovery = new BluetoothDiscovery(context);
             this.bluetoothDiscovery = bluetoothDiscovery;
 
             this.bluetoothDiscovery.stopDiscovery(context);
@@ -191,7 +182,6 @@ public class BluetoothController extends AbstractController {
         }
 
     }
-
 
     @Override
     public void startDiscovery(Context context) {
@@ -258,7 +248,7 @@ public class BluetoothController extends AbstractController {
 
     @SuppressLint("MissingPermission")
     private void startBluetoothServer(Context context) throws ConnectionException {
-        Log.d(TAG, "startBluetoothServer:" );
+        Log.d(TAG, "startBluetoothServer:");
         ThreadServer threadServer = ServerFactory.getServerInstance(Config.Antenna.BLUETOOTH, true);
         this.threadServer = threadServer;
         if (threadServer != null) {
@@ -266,7 +256,7 @@ public class BluetoothController extends AbstractController {
         }
         if (this.bluetoothAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) { //get discoverable permissions
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300); //value 0 means 120 seconds discoverable duration
             getContext().startActivity(intent);
         }
@@ -277,14 +267,12 @@ public class BluetoothController extends AbstractController {
             this.threadServerBle = ServerFactory.getServerInstance(Config.Antenna.BLUETOOTH_LE, true);
             try {
                 this.threadServerBle.startServer();
-            }
-            catch (ConnectionException connectionException) {
+            } catch (ConnectionException connectionException) {
                 Log.e(TAG, "startBluetoothLeServer:", connectionException);
             }
             try {
                 Thread.sleep(500L);
-            }
-            catch (InterruptedException interruptedException) {
+            } catch (InterruptedException interruptedException) {
                 interruptedException.printStackTrace();
             }
 
@@ -340,7 +328,7 @@ public class BluetoothController extends AbstractController {
                 break;
             case BluetoothDevice.ACTION_FOUND:
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                int  rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,Short.MIN_VALUE);
+                int rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE);
                 Log.d(TAG, "onReceive: " + device.getName() + ": " + device.getAddress() + " | RSSI: " + rssi + "dBm");
                 this.bluetoothDiscovery.addBluetoothDevice(intent);
                 break;
@@ -356,9 +344,5 @@ public class BluetoothController extends AbstractController {
 
     public Context getContext() {
         return this.context;
-    }
-
-    public static GattManager getGattManager() {
-        return gattManager;
     }
 }

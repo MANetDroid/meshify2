@@ -51,18 +51,15 @@ public class TransactionManager {
                 try {
                     transaction.getSession().flush(transaction.getMeshifyEntity());
                     transaction.getTransactionManager().notifySent(transaction);
-                }
-                catch (IOException iOException) {
+                } catch (IOException iOException) {
                     Log.e(TAG, "startInBackground:IOException ", iOException);
                     iOException.printStackTrace();
 
-                }
-                catch (MessageException messageException) {
+                } catch (MessageException messageException) {
                     Log.e(TAG, "startInBackground:MessageException ", messageException);
                     messageException.printStackTrace();
 
-                }
-                catch (InterruptedException interruptedException) {
+                } catch (InterruptedException interruptedException) {
                     Log.e(TAG, "startInBackground:InterruptedException ", interruptedException);
 
                 }
@@ -102,15 +99,17 @@ public class TransactionManager {
             case 1: {
                 List<Message> list = this.getMessageListFromTransaction(transaction);
                 for (Message message : list) {
-                    if (Meshify.getInstance().getMeshifyCore().getMessageListener() == null) continue;
+                    if (Meshify.getInstance().getMeshifyCore().getMessageListener() == null)
+                        continue;
                     new Handler(Looper.getMainLooper()).post(() -> {
-                       Meshify.getInstance().getMeshifyCore().getMessageListener().onMessageSent(message.getUuid());
+                        Meshify.getInstance().getMeshifyCore().getMessageListener().onMessageSent(message.getUuid());
                     });
                 }
                 break;
             }
         }
     }
+
     private List<Message> getMessageListFromTransaction(Transaction tr1) {
         ArrayList<Message> arrayList = new ArrayList<Message>();
         switch (tr1.getMeshifyEntity().getEntity()) {

@@ -1,5 +1,6 @@
 package com.manetdroid.meshify2.framework.controllers.bluetoothLe.gatt.operations;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -25,6 +26,7 @@ public class BatteryService extends GattOperation {
         this.descriptorValue = descriptorValue;
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void writeDescriptor(BluetoothGatt bluetoothGatt) {
         BluetoothGattDescriptor bluetoothGattDescriptor;

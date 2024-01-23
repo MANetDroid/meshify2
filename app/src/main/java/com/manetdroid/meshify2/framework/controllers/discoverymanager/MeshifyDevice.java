@@ -14,7 +14,7 @@ import io.reactivex.Completable;
  * @author Kavinda Perera
  * @version 1.0
  */
-public abstract class MeshifyDevice  implements Comparable {
+public abstract class MeshifyDevice implements Comparable {
 
     private String id;
     private Device device;
@@ -33,14 +33,14 @@ public abstract class MeshifyDevice  implements Comparable {
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof MeshifyDevice) {
-            return this.device.getDeviceAddress().equalsIgnoreCase(((MeshifyDevice)obj).getDevice().getDeviceAddress()) || this.device.getSessionId() == ((MeshifyDevice)obj).getDevice().getSessionId();
+            return this.device.getDeviceAddress().equalsIgnoreCase(((MeshifyDevice) obj).getDevice().getDeviceAddress()) || this.device.getSessionId() == ((MeshifyDevice) obj).getDevice().getSessionId();
         }
         return false;
     }
 
     @Override
     public int compareTo(Object object) {
-        return this.device.getDeviceAddress().compareTo(((MeshifyDevice)object).getDevice().getDeviceAddress());
+        return this.device.getDeviceAddress().compareTo(((MeshifyDevice) object).getDevice().getDeviceAddress());
     }
 
 }

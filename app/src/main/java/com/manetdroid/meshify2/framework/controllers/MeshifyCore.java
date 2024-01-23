@@ -32,12 +32,12 @@ import io.reactivex.schedulers.Schedulers;
 public class MeshifyCore {
 
     /*Shared Preference Keys*/
-    public static final String PREFS_NAME = "com.codewizards.meshify.client";
-    public static final String PREFS_USER_UUID = "com.codewizards.meshify.uuid";
-    public static final String PREFS_APP_KEY = "com.codewizards.meshify.APP_KEY";
-    public static final String PREFS_PUBLIC_KEY ="com.codewizards.meshify.key.public";
-    public static final String PREFS_PRIVATE_KEY ="com.codewizards.meshify.key.private";
-    public static final String PREFS_KEY_PAIRS ="com.codewizards.meshify.key.pairs";
+    public static final String PREFS_NAME = "com.manetdroid.meshify2.client";
+    public static final String PREFS_USER_UUID = "com.manetdroid.meshify2.uuid";
+    public static final String PREFS_APP_KEY = "com.manetdroid.meshify2.APP_KEY";
+    public static final String PREFS_PUBLIC_KEY = "com.manetdroid.meshify2.key.public";
+    public static final String PREFS_PRIVATE_KEY = "com.manetdroid.meshify2.key.private";
+    public static final String PREFS_KEY_PAIRS = "com.manetdroid.meshify2.key.pairs";
 
     private static final String TAG = "[Meshify][MeshifyCore]";
 
@@ -72,10 +72,16 @@ public class MeshifyCore {
     public MeshifyCore(Context context, Config config) {
         this.context = context;
         this.config = config;
-        this.sharedPreferences = context.getSharedPreferences(MeshifyCore.PREFS_NAME, 0);;
+        this.sharedPreferences = context.getSharedPreferences(MeshifyCore.PREFS_NAME, 0);
+        ;
         this.editor = sharedPreferences.edit();
         this.messageController = new MessageController(context, config);
         this.meshifyReceiver = new MeshifyReceiver(config, context);
+    }
+
+    public static void sendEntity(Session session, MeshifyEntity meshifyEntity) throws MessageException, IOException {
+        Log.d(TAG, "sendEntity:" + meshifyEntity);
+        TransactionManager.sendEntity(session, meshifyEntity);
     }
 
     public SharedPreferences getSharedPreferences() {
@@ -85,12 +91,6 @@ public class MeshifyCore {
     public SharedPreferences.Editor getEditor() {
         return this.editor;
     }
-
-    public static void sendEntity(Session session, MeshifyEntity meshifyEntity) throws MessageException, IOException {
-        Log.d(TAG, "sendEntity:" + meshifyEntity );
-        TransactionManager.sendEntity(session, meshifyEntity);
-    }
-
 
     public void initializeServices() {
         Log.d(TAG, "initializeServices:");
@@ -108,8 +108,8 @@ public class MeshifyCore {
         this.meshifyReceiver.stopServer(this.config.getAntennaType());
         ConnectionManager.reset();
 
-        Disposable disposable = this.completable.retryWhen(new RetryWhenLambda(3, 500)).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread()).subscribe(()->{
-            if (this.getConnectionListener()!=null) {
+        Disposable disposable = this.completable.retryWhen(new RetryWhenLambda(3, 500)).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.newThread()).subscribe(() -> {
+            if (this.getConnectionListener() != null) {
                 Meshify.getInstance().setMeshifyCore(null);
             }
         }, throwable -> Log.e(TAG, "accept: error " + throwable.getMessage()));
@@ -131,7 +131,7 @@ public class MeshifyCore {
 
     public void sendBroadcastMessage(Message message, ConfigProfile profile) {
 //        profile = profile == null ? ConfigProfile.Default : profile;
-        this.messageController.sendMessage( message, profile);
+        this.messageController.sendMessage(message, profile);
     }
 
     public MessageListener getMessageListener() {
@@ -143,10 +143,6 @@ public class MeshifyCore {
         this.messageListener = messageListener;
     }
 
-    public void setConnectionListener(ConnectionListener connectionListener) {
-        this.connectionListener = connectionListener;
-    }
-
     public Context getContext() {
         return this.context;
     }
@@ -155,12 +151,16 @@ public class MeshifyCore {
         return this.connectionListener;
     }
 
+    public void setConnectionListener(ConnectionListener connectionListener) {
+        this.connectionListener = connectionListener;
+    }
+
     public MessageController getMessageController() {
         return this.messageController;
     }
 
     public void connectDevice(Device device) {
-        Log.i(TAG, "Connect to Device: " + device );
+        Log.i(TAG, "Connect to Device: " + device);
         ConnectionManager.connect(device);
     }
 

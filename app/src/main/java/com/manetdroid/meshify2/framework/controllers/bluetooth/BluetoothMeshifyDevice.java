@@ -50,7 +50,7 @@ public class BluetoothMeshifyDevice extends MeshifyDevice {
                 }
                 BluetoothSocket bluetoothSocket = this.isSecure ? this.getDevice().getBluetoothDevice().createRfcommSocketToServiceRecord(BluetoothUtils.getBluetoothUuid()) : this.getDevice().getBluetoothDevice().createInsecureRfcommSocketToServiceRecord(BluetoothUtils.getBluetoothUuid());
                 bluetoothSocket.connect();
-                Log.e(TAG, "connect(): success [ " + BluetoothUtils.getBluetoothUuid() +  " | onThread: " +  Thread.currentThread().getName() + " ]");
+                Log.e(TAG, "connect(): success [ " + BluetoothUtils.getBluetoothUuid() + " | onThread: " + Thread.currentThread().getName() + " ]");
 
                 Session session = new Session(bluetoothSocket);
                 session.setSessionId(this.getDevice().getDeviceAddress());
@@ -60,10 +60,9 @@ public class BluetoothMeshifyDevice extends MeshifyDevice {
                 SessionManager.queueSession(session);
                 DeviceManager.addDevice(session.getDevice());
                 completableEmitter.onComplete(); //call connection subscriber onComplete
-            }
-            catch (IOException iOException) {
-                Log.e(TAG, "connect(): fail [ " + iOException.getMessage() +  " | onThread: " +  Thread.currentThread().getName() + " ]");
-                completableEmitter.tryOnError((Throwable)iOException); //call connection subscriber onError
+            } catch (IOException iOException) {
+                Log.e(TAG, "connect(): fail [ " + iOException.getMessage() + " | onThread: " + Thread.currentThread().getName() + " ]");
+                completableEmitter.tryOnError((Throwable) iOException); //call connection subscriber onError
             }
         }).retryWhen(new RetryWhenLambda(3, 1000));
     }

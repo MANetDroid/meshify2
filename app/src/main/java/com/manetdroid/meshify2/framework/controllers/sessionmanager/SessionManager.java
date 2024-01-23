@@ -42,7 +42,8 @@ public class SessionManager {
             return session;
         }
         for (Session session2 : sessionMap.values()) {
-            if (session2.getDevice() == null || session2.getUserId() == null || !session2.getUserId().equals(Id) && !session2.getDevice().getDeviceAddress().equalsIgnoreCase(Id)) continue;
+            if (session2.getDevice() == null || session2.getUserId() == null || !session2.getUserId().equals(Id) && !session2.getDevice().getDeviceAddress().equalsIgnoreCase(Id))
+                continue;
             return session2;
         }
         return session;

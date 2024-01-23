@@ -31,7 +31,7 @@ public class ServerFactory {
                 return bluetoothServer;
             }
 
-            case BLUETOOTH_LE:{
+            case BLUETOOTH_LE: {
                 if (bluetoothLeServer == null && isNew) {
                     try {
                         Log.d(TAG, "getServerInstance: new bluetooth le server created");

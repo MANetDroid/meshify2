@@ -1,5 +1,6 @@
 package com.manetdroid.meshify2.framework.controllers.bluetoothLe.gatt;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -29,6 +30,7 @@ public class BluetoothLeGatt {
         return this.connectGatt(callback, bluetoothDevice, true);
     }
 
+    @SuppressLint("MissingPermission")
     private BluetoothGatt connectGatt(BluetoothGattCallback bluetoothGattCallback, BluetoothDevice bluetoothDevice, boolean autoConnect) {
         if (Build.VERSION.SDK_INT >= 23) {
             return bluetoothDevice.connectGatt(this.context, autoConnect, bluetoothGattCallback, 0);

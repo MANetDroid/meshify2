@@ -11,12 +11,12 @@ public class Connection {
         this.connectionRetries = connectionRetries;
     }
 
-    public void setConnected(boolean isConnected) {
-        this.isConnected = isConnected;
-    }
-
     public boolean isConnected() {
         return this.isConnected;
+    }
+
+    public void setConnected(boolean isConnected) {
+        this.isConnected = isConnected;
     }
 
     public int getConnectionRetries() {

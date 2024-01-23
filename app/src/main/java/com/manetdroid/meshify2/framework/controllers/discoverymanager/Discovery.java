@@ -12,12 +12,9 @@ import io.reactivex.subscribers.DisposableSubscriber;
 
 public abstract class Discovery {
 
-    protected String TAG = "[Meshify][Discovery]";
-
     public DisposableSubscriber<Device> disposableSubscriber;
-
     public Flowable<Device> deviceFlowable; //emits device objects
-
+    protected String TAG = "[Meshify][Discovery]";
     private Config config;
 
     private boolean discoveryRunning = false;

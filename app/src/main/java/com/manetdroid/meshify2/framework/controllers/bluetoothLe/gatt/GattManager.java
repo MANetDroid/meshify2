@@ -28,15 +28,16 @@ public class GattManager {
     }
 
 
-    synchronized void start(){
+    synchronized void start() {
         if (this.gattOperation == null && this.gattOperations.size() > 0) {
             GattOperation gattOperation1 = this.gattOperations.poll();
+            this.gattOperation = gattOperation1;
         }
     }
 
     public void removeGattOperation(BluetoothDevice bluetoothDevice) {
         for (GattOperation gattOperation2 : this.gattOperations) {
-            if (!gattOperation.getBluetoothDevice().equals((Object)bluetoothDevice)) continue;
+            if (!gattOperation.getBluetoothDevice().equals((Object) bluetoothDevice)) continue;
             if (this.getGattOperation() != null && this.getGattOperation().equals(gattOperation2)) {
                 //
             }

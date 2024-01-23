@@ -1,6 +1,7 @@
 package com.manetdroid.meshify2.framework.controllers.bluetoothLe;
 
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -100,6 +101,7 @@ public class BleMeshifyDevice extends MeshifyDevice {
             Log.e(BleMeshifyDevice.this.TAG, "onPhyRead(): txPhy: " + txPhy + " | rxPhy: " + rxPhy + " | status: " + status);
         }
 
+        @SuppressLint("MissingPermission")
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             super.onConnectionStateChange(gatt, status, newState);
@@ -182,11 +184,12 @@ public class BleMeshifyDevice extends MeshifyDevice {
 
             }
 
-            boolean bl = gatt.discoverServices();
+            @SuppressLint("MissingPermission") boolean bl = gatt.discoverServices();
             Log.e(BleMeshifyDevice.this.TAG, "start service discovery: " + bl);
 
         }
 
+        @SuppressLint("MissingPermission")
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
@@ -263,6 +266,7 @@ public class BleMeshifyDevice extends MeshifyDevice {
 
         }
 
+        @SuppressLint("MissingPermission")
         private void clearFailedConnection(BluetoothGatt bluetoothGatt) {
             BluetoothController.getGattManager().removeGattOperation(bluetoothGatt.getDevice());
             BluetoothController.getGattManager().getBluetoothGattMap().remove(bluetoothGatt.getDevice().getAddress());

@@ -1,5 +1,6 @@
 package com.manetdroid.meshify2.framework.controllers.bluetoothLe;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
@@ -51,6 +52,7 @@ public class BluetoothLeServer  extends ThreadServer<BluetoothDevice, BluetoothG
         }
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void stopServer() throws ConnectionException {
         if (this.alive()) {
@@ -101,6 +103,7 @@ public class BluetoothLeServer  extends ThreadServer<BluetoothDevice, BluetoothG
         return true;
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void run() {
         super.run();
@@ -115,6 +118,7 @@ public class BluetoothLeServer  extends ThreadServer<BluetoothDevice, BluetoothG
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void openGattServer(Context context) {
         if (this.getServerSocket() == null) {
             this.acceptConnection(this.bluetoothManager.openGattServer(context, new GattServerCallback()));

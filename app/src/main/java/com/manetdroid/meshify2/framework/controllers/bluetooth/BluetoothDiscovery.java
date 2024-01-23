@@ -33,24 +33,17 @@ import io.reactivex.disposables.Disposable;
 
 public class BluetoothDiscovery extends Discovery {
 
-    protected String TAG = "[Meshify][BluetoothDiscovery]";
-
-    Context context;
-
-    private BluetoothAdapter bluetoothAdapter;
-
-    private CopyOnWriteArrayList<BluetoothDevice> confirmedBluetoothDevices; //CopyOnWriteArrayList is a thread-safe variant of ArrayList. Used in a Thread based environment where read operations are very frequent and update operations are rare.
-
-    private CopyOnWriteArrayList<Device> devices;
-
-    private CopyOnWriteArrayList<BluetoothDevice> discoveredDevices;
-
     static String l;
-
     static String m;
-
+    protected String TAG = "[Meshify][BluetoothDiscovery]";
+    Context context;
+    private BluetoothAdapter bluetoothAdapter;
+    private CopyOnWriteArrayList<BluetoothDevice> confirmedBluetoothDevices; //CopyOnWriteArrayList is a thread-safe variant of ArrayList. Used in a Thread based environment where read operations are very frequent and update operations are rare.
+    private CopyOnWriteArrayList<Device> devices;
+    private CopyOnWriteArrayList<BluetoothDevice> discoveredDevices;
     private FlowableEmitter<Device> emitter;
 
+    @SuppressLint("SoonBlockedPrivateApi")
     public BluetoothDiscovery(Context context) {
         this.context = context;
         this.bluetoothAdapter = MeshifyUtils.getBluetoothAdapter(context);
@@ -69,7 +62,7 @@ public class BluetoothDiscovery extends Discovery {
 
         this.deviceFlowable = Flowable.create(flowableEmitter -> { //emits the discovered devices
             this.emitter = flowableEmitter;
-        }, (BackpressureStrategy)BackpressureStrategy.BUFFER); //BackpressureStrategy.BUFFER, the source will buffer all the devices until the subscriber can consume them
+        }, (BackpressureStrategy) BackpressureStrategy.BUFFER); //BackpressureStrategy.BUFFER, the source will buffer all the devices until the subscriber can consume them
 
     }
 
@@ -82,13 +75,13 @@ public class BluetoothDiscovery extends Discovery {
         this.setConfig(config);
         if (!this.bluetoothAdapter.isDiscovering()) {
             Completable.create(completableEmitter -> {
-                if (!this.bluetoothAdapter.startDiscovery()) { //starts discovery
-                    completableEmitter.tryOnError(new Throwable("Discovery start failed")); //if discovery start failed call onError of CompletableObserver
-                } else {
-                    completableEmitter.onComplete();
-                }
-            }).retryWhen(new RetryWhenLambda(3, 1000)) //2000 milliseconds delay retry
-                    .subscribe(new  CompletableObserver(){
+                        if (!this.bluetoothAdapter.startDiscovery()) { //starts discovery
+                            completableEmitter.tryOnError(new Throwable("Discovery start failed")); //if discovery start failed call onError of CompletableObserver
+                        } else {
+                            completableEmitter.onComplete();
+                        }
+                    }).retryWhen(new RetryWhenLambda(3, 1000)) //2000 milliseconds delay retry
+                    .subscribe(new CompletableObserver() {
                         public void onSubscribe(Disposable d2) {
                             Log.d(TAG, "onSubscribe: ");
                         }
@@ -101,7 +94,7 @@ public class BluetoothDiscovery extends Discovery {
                             Log.e(TAG, "onError: " + e2);
                             BluetoothDiscovery.this.stopDiscovery(context); //stop discovery on error
                         }
-            });
+                    });
         }
     }
 
@@ -110,8 +103,7 @@ public class BluetoothDiscovery extends Discovery {
         try {
             Log.v(TAG, "... fetching with sdpSearch " + bluetoothDevice.getAddress() + " (" + bluetoothDevice.getName() + ")");
             bluetoothDevice.getClass().getDeclaredMethod("sdpSearch", new Class[]{ParcelUuid.class}).invoke(bluetoothDevice, new Object[]{new ParcelUuid(BluetoothUtils.getBluetoothUuid())});
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
@@ -133,9 +125,9 @@ public class BluetoothDiscovery extends Discovery {
                         Log.w(TAG, "removed device due to fetch timeout: " + bluetoothDevice.getAddress());
                     }, 20000L, TimeUnit.MILLISECONDS);
 //                    if (Build.VERSION.SDK_INT > 23) {
-                        Log.v(TAG, "fetching " + bluetoothDevice.getAddress() + " (" + bluetoothDevice.getName() + ")");
-                        bluetoothDevice.fetchUuidsWithSdp();
-                        continue;
+                    Log.v(TAG, "fetching " + bluetoothDevice.getAddress() + " (" + bluetoothDevice.getName() + ")");
+                    bluetoothDevice.fetchUuidsWithSdp();
+                    continue;
 //                    }
 //                    this.sdpSearch(bluetoothDevice);
                 }
@@ -149,7 +141,7 @@ public class BluetoothDiscovery extends Discovery {
     @SuppressLint(value = {"HardwareIds", "MissingPermission"})
     public void addBluetoothDevice(Intent intent) {
 
-        BluetoothDevice bluetoothDevice = (BluetoothDevice)intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+        BluetoothDevice bluetoothDevice = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         Log.d(TAG, "addBluetoothDevice: " + bluetoothDevice.getName());
 
         boolean z = true;
@@ -176,20 +168,19 @@ public class BluetoothDiscovery extends Discovery {
     private void addDevice(BluetoothDevice bluetoothDevice, boolean z, boolean isBLE) {
         Log.d(TAG, "addDevice: isKnown:" + z + " | isBle:" + isBLE);
 
-            Device device = new Device(bluetoothDevice, isBLE);
-            this.devices.addIfAbsent(device);
+        Device device = new Device(bluetoothDevice, isBLE);
+        this.devices.addIfAbsent(device);
 
 
+        if (z) {
 
-            if (z) {
+            DeviceManager.addDevice(device);
+            this.addIfAbsentConfirmed(bluetoothDevice);
+            this.emitter.onNext(device); //notify connection subscriber
 
-                DeviceManager.addDevice(device);
-                this.addIfAbsentConfirmed(bluetoothDevice);
-                this.emitter.onNext(device); //notify connection subscriber
-
-            } else if (!z && !isBLE) {
-                this.addIfAbsentDiscovered(bluetoothDevice);
-            }
+        } else if (!z && !isBLE) {
+            this.addIfAbsentDiscovered(bluetoothDevice);
+        }
 
     }
 
@@ -199,12 +190,12 @@ public class BluetoothDiscovery extends Discovery {
     }
 
     private void addIfAbsentDiscovered(BluetoothDevice bluetoothDevice) {
-        Log.d(TAG, "addDevice: " + bluetoothDevice + " to discoveredDevices" );
+        Log.d(TAG, "addDevice: " + bluetoothDevice + " to discoveredDevices");
         this.discoveredDevices.addIfAbsent(bluetoothDevice);
     }
 
     private boolean removeDevice(BluetoothDevice bluetoothDevice) {
-        return this.discoveredDevices.remove((Object)bluetoothDevice);
+        return this.discoveredDevices.remove((Object) bluetoothDevice);
     }
 
     private void removeDiscoveredDevice(BluetoothDevice bluetoothDevice) {
@@ -215,15 +206,16 @@ public class BluetoothDiscovery extends Discovery {
     }
 
     @SuppressLint("MissingPermission")
-    public void pair(Intent intent){
-        BluetoothDevice bluetoothDevice = (BluetoothDevice)intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+    public void pair(Intent intent) {
+        BluetoothDevice bluetoothDevice = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         Parcelable[] arrparcelable = intent.getParcelableArrayExtra(BluetoothDevice.EXTRA_UUID);
         if (bluetoothDevice != null && bluetoothDevice.getAddress() != null) {
             if (arrparcelable != null) {
                 boolean matched = false;
                 for (Parcelable parcelable : arrparcelable) {
                     Log.v(this.TAG, "::: ::: ::: FETCHED UUID: " + parcelable.toString() + " Device: " + bluetoothDevice.getName() + " Address: " + bluetoothDevice.getAddress());
-                    if (!(parcelable.toString().equals(BluetoothUtils.getBluetoothUuid().toString()))) continue;
+                    if (!(parcelable.toString().equals(BluetoothUtils.getBluetoothUuid().toString())))
+                        continue;
                     Log.v(this.TAG, "::: ::: ::: Matching device found!");
                     matched = true;
                 }

@@ -82,29 +82,25 @@ public class BluetoothLeDiscovery extends Discovery {
                         }
                     }
                     try {
-                        BluetoothLeDiscovery.this.bluetoothAdapter.getBluetoothLeScanner()
-                                .startScan(
-                                        BluetoothUtils.getBluetoothLeScanFilter(),
-                                        BluetoothUtils.getScanSettings(),
-                                        BluetoothLeDiscovery.this.scanCallback = new ScanCallback() {
-                                            @Override
-                                            public void onScanResult(int callbackType, ScanResult result) {
-                                                super.onScanResult(callbackType, result);
-                                                BluetoothLeDiscovery.this.onScanResultAction(result, (FlowableEmitter<Device>) emitter);
-                                            }
+                        BluetoothLeDiscovery.this.bluetoothAdapter.getBluetoothLeScanner().startScan(BluetoothUtils.getBluetoothLeScanFilter(), BluetoothUtils.getScanSettings(), BluetoothLeDiscovery.this.scanCallback = new ScanCallback() {
+                            @Override
+                            public void onScanResult(int callbackType, ScanResult result) {
+                                super.onScanResult(callbackType, result);
+                                BluetoothLeDiscovery.this.onScanResultAction(result, (FlowableEmitter<Device>) emitter);
+                            }
 
-                                            @Override
-                                            public void onBatchScanResults(List<ScanResult> results) {
-                                                super.onBatchScanResults(results);
-                                                Log.d(TAG, "onBatchScanResults: ");
-                                            }
+                            @Override
+                            public void onBatchScanResults(List<ScanResult> results) {
+                                super.onBatchScanResults(results);
+                                Log.d(TAG, "onBatchScanResults: ");
+                            }
 
-                                            @Override
-                                            public void onScanFailed(int errorCode) {
-                                                super.onScanFailed(errorCode);
-                                                BluetoothLeDiscovery.this.scanFailedAction(errorCode);
-                                            }
-                                        });
+                            @Override
+                            public void onScanFailed(int errorCode) {
+                                super.onScanFailed(errorCode);
+                                BluetoothLeDiscovery.this.scanFailedAction(errorCode);
+                            }
+                        });
                         BluetoothLeDiscovery.this.setDiscoveryRunning(true);
 
 
@@ -130,7 +126,7 @@ public class BluetoothLeDiscovery extends Discovery {
     public void stopDiscovery(Context context) {
         super.stopDiscovery(context);
         this.disposable.clear();
-        if (this.bluetoothAdapter != null && this.scanCallback != null && this.bluetoothAdapter.isEnabled() && this.bluetoothAdapter.getBluetoothLeScanner() != null){
+        if (this.bluetoothAdapter != null && this.scanCallback != null && this.bluetoothAdapter.isEnabled() && this.bluetoothAdapter.getBluetoothLeScanner() != null) {
             Log.i(TAG, "stopDiscovery: stopping scan");
         } else {
             // TODO
@@ -217,12 +213,7 @@ public class BluetoothLeDiscovery extends Discovery {
                 UUID uuid = ((ParcelUuid) entry.getKey()).getUuid();
                 string = this.discoveredDevices.get(bluetoothDevice.getAddress());
                 if (string != null) continue;
-                Log.w(TAG, "\nAPPKEY: " + Meshify.getInstance().getMeshifyClient().getApiKey() +
-                        "\nDeviceData: " + string3 +
-                        "\nService UUID: " + uuid.toString() +
-                        "\nCustom UUID: " + this.bleUuid2 +
-                        "\nBT UUID: " + this.btUuid +
-                        "\nBLE UUID: " + this.bleUuid);
+                Log.w(TAG, "\nAPPKEY: " + Meshify.getInstance().getMeshifyClient().getApiKey() + "\nDeviceData: " + string3 + "\nService UUID: " + uuid.toString() + "\nCustom UUID: " + this.bleUuid2 + "\nBT UUID: " + this.btUuid + "\nBLE UUID: " + this.bleUuid);
                 if (!uuid.toString().equalsIgnoreCase(this.bleUuid) && !uuid.toString().equalsIgnoreCase(this.btUuid) && !uuid.toString().equalsIgnoreCase(this.bleUuid2))
                     continue;
                 string = BluetoothUtils.getUuidFromDataString(string3);
@@ -281,22 +272,22 @@ public class BluetoothLeDiscovery extends Discovery {
             ScheduledFuture scheduledFuture = (ScheduledFuture) BluetoothLeDiscovery.this.scheduledDiscoveredDevices.remove(this.device.getUserId());
             Log.d(TAG, "Schedule active for: " + this.device.getUserId() + " and found: " + BluetoothLeDiscovery.this.discoveredDevices.containsKey(this.device.getBluetoothDevice().getAddress()));
 
-            if (BluetoothLeDiscovery.this.discoveredDevices.containsKey(this.device.getBluetoothDevice().getAddress())){
+            if (BluetoothLeDiscovery.this.discoveredDevices.containsKey(this.device.getBluetoothDevice().getAddress())) {
                 Iterator iterator = BluetoothLeDiscovery.this.discoveredDevices.entrySet().iterator();
                 String key = null;
 
-                while (iterator.hasNext()){
+                while (iterator.hasNext()) {
                     Map.Entry entry = (Map.Entry) iterator.next();
-                    if (!((String)entry.getValue()).equals(this.device.getUserId())) continue;
-                    key = (String)entry.getKey();
+                    if (!((String) entry.getValue()).equals(this.device.getUserId())) continue;
+                    key = (String) entry.getKey();
                 }
                 Log.i(TAG, "Key found: " + key);
 
-                if (key!=null){
+                if (key != null) {
                     BluetoothLeDiscovery.this.discoveredDevices.remove(key);
                     Log.e(TAG, "discoveredDevices: " + BluetoothLeDiscovery.this.discoveredDevices.size() + " scheduledDiscoveredDevices: " + BluetoothLeDiscovery.this.scheduledDiscoveredDevices.size());
 
-                    if (SessionManager.getSession(this.device.getBluetoothDevice().getAddress()) == null){
+                    if (SessionManager.getSession(this.device.getBluetoothDevice().getAddress()) == null) {
 
                     } else {
                         Log.d(TAG, "Device already have a session");

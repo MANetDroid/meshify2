@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 
+import com.google.gson.GsonBuilder;
 import com.manetdroid.meshify2.api.Config;
 import com.manetdroid.meshify2.api.Device;
 import com.manetdroid.meshify2.api.MeshifyUtils;
@@ -16,7 +17,6 @@ import com.manetdroid.meshify2.framework.controllers.sessionmanager.Session;
 import com.manetdroid.meshify2.framework.controllers.sessionmanager.SessionManager;
 import com.manetdroid.meshify2.framework.exceptions.ConnectionException;
 import com.manetdroid.meshify2.logs.Log;
-import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
@@ -46,7 +46,7 @@ public class BluetoothServer extends ThreadServer<BluetoothSocket, BluetoothServ
     @Override
     public void startServer() throws ConnectionException {
         Log.i(TAG, "startServer: is connected: " + this.alive());
-        if (!this.alive()){
+        if (!this.alive()) {
             this.setRunning(true);
             super.start();
         }
@@ -57,12 +57,10 @@ public class BluetoothServer extends ThreadServer<BluetoothSocket, BluetoothServ
         if (this.alive()) {
             try {
                 this.setRunning(false);
-                ((BluetoothServerSocket)this.getServerSocket()).close();
-            }
-            catch (IOException iOException) {
+                ((BluetoothServerSocket) this.getServerSocket()).close();
+            } catch (IOException iOException) {
                 throw new ConnectionException(iOException);
-            }
-            finally {
+            } finally {
                 super.interrupt();
             }
         }
@@ -80,7 +78,7 @@ public class BluetoothServer extends ThreadServer<BluetoothSocket, BluetoothServ
         session.setDevice(device);
         SessionManager.queueSession(session);
         DeviceManager.addDevice(device);
-        Log.d(TAG, "Connected with device: " + new GsonBuilder().setPrettyPrinting().create().toJson((Object)device));
+        Log.d(TAG, "Connected with device: " + new GsonBuilder().setPrettyPrinting().create().toJson((Object) device));
     }
 
     @Override
@@ -91,21 +89,19 @@ public class BluetoothServer extends ThreadServer<BluetoothSocket, BluetoothServ
     @Override
     public void run() {
 
-        while (this.isRunning()){
+        while (this.isRunning()) {
             Log.d(TAG, "runServer: is alive: " + this.alive());
             if (this.getServerSocket() == null) {
                 Log.e(TAG, "run: null server_socket, stopServer");
                 try {
                     this.stopServer();
-                }
-                catch (ConnectionException connectionException) {
+                } catch (ConnectionException connectionException) {
                     Log.e(TAG, "run: stopServer exception", connectionException);
                 }
             }
             try {
-                this.acceptConnection(((BluetoothServerSocket)this.getServerSocket()).accept()); //waiting to accept
-            }
-            catch (IOException e) {
+                this.acceptConnection(((BluetoothServerSocket) this.getServerSocket()).accept()); //waiting to accept
+            } catch (IOException e) {
                 Log.e(TAG, "runServer:IOException" + e.getMessage());
             }
         }

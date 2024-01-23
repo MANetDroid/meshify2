@@ -13,6 +13,10 @@ public abstract class GattOperation {
 
     private String operationId = UUID.randomUUID().toString();
 
+    public GattOperation(BluetoothDevice bluetoothDevice) {
+        this.bluetoothDevice = bluetoothDevice;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -28,13 +32,7 @@ public abstract class GattOperation {
 
     @Override
     public String toString() {
-        return "GattOperation{" +
-                ", operationId='" + operationId + '\'' +
-                '}';
-    }
-
-    public GattOperation(BluetoothDevice bluetoothDevice) {
-        this.bluetoothDevice = bluetoothDevice;
+        return "GattOperation{" + ", operationId='" + operationId + '\'' + '}';
     }
 
     public BluetoothDevice getBluetoothDevice() {

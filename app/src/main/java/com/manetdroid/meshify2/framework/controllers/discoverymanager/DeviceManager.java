@@ -29,8 +29,7 @@ public class DeviceManager {
     private DeviceManager() {
         try {
             threadPoolExecutor.awaitTermination(200L, TimeUnit.MILLISECONDS);
-        }
-        catch (InterruptedException interruptedException) {
+        } catch (InterruptedException interruptedException) {
             interruptedException.printStackTrace();
         }
     }
@@ -88,11 +87,10 @@ public class DeviceManager {
                     } else {
                         Log.e(TAG, "removeDevice: not calling on device lost becuase userid was null");
                     }
-                }
-                catch (Exception exception) {
+                } catch (Exception exception) {
                     Log.e(TAG, "removeDevice: device could be null " + exception.getMessage());
                 }
-                Log.w(TAG, "Removing device: " + device.getDeviceAddress() + " (" + device.getUserId() + ") " + (Object)((Object)device.getAntennaType()) + ". DeviceList size: " + deviceList.size());
+                Log.w(TAG, "Removing device: " + device.getDeviceAddress() + " (" + device.getUserId() + ") " + (Object) ((Object) device.getAntennaType()) + ". DeviceList size: " + deviceList.size());
             }
         }
     }

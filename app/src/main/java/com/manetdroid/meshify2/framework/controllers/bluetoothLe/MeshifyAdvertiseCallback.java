@@ -18,7 +18,7 @@ public class MeshifyAdvertiseCallback extends AdvertiseCallback {
     public void onStartSuccess(AdvertiseSettings settingsInEffect) {
         super.onStartSuccess(settingsInEffect);
         BluetoothController.state = 3;
-        Log.i(TAG, "ADVERTISE_RUNNING | state = 3 \n" + settingsInEffect.toString() );
+        Log.i(TAG, "ADVERTISE_RUNNING | state = 3 \n" + settingsInEffect.toString());
     }
 
     @Override

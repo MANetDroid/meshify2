@@ -28,7 +28,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- *  <p>This class manages all the connections</p>
+ * <p>This class manages all the connections</p>
+ *
  * @author Kavinda Perera
  * @version 1.0
  */
@@ -131,7 +132,7 @@ public class ConnectionManager {
 
     public static void connect(Device device) {
         isAutoConnect();
-        if(!devices.contains(device)) {
+        if (!devices.contains(device)) {
             devices.add(device);
         }
         ConnectionManager.connect();
@@ -144,7 +145,7 @@ public class ConnectionManager {
         if (meshifyDevice == null && devices.size() > 0) {
             final Device device = devices.poll();
             MeshifyDevice meshifyDevice1 = ConnectionManager.getConnectivity(device);
-            CompletableObserver completableObserver = new CompletableObserver(){
+            CompletableObserver completableObserver = new CompletableObserver() {
                 public void onSubscribe(Disposable d2) {
                     Log.d(TAG, "onSubscribe: ");
                 }
@@ -157,7 +158,7 @@ public class ConnectionManager {
 
                 public void onError(Throwable e2) {
                     Log.e(TAG, "onError: " + e2);
-                    MeshifyDevice meshifyDevice2= ConnectionManager.getMeshifyDevice();
+                    MeshifyDevice meshifyDevice2 = ConnectionManager.getMeshifyDevice();
                     if (meshifyDevice2 != null && meshifyDevice2.getDevice().equals(device)) {
                         ConnectionManager.setMeshifyDevice(null);
                     }
@@ -169,7 +170,7 @@ public class ConnectionManager {
 
                 if (BluetoothController.state == 3) {
                     BluetoothAdapter bluetoothAdapter = MeshifyUtils.getBluetoothAdapter(Meshify.getInstance().getMeshifyCore().getContext());
-                    bluetoothAdapter.getBluetoothLeAdvertiser().stopAdvertising((AdvertiseCallback)new MeshifyAdvertiseCallback());
+                    bluetoothAdapter.getBluetoothLeAdvertiser().stopAdvertising((AdvertiseCallback) new MeshifyAdvertiseCallback());
                     bluetoothAdapter.cancelDiscovery();
                     Log.i(TAG, "stop advertising & discovering " + bluetoothAdapter.isDiscovering());
                 }
@@ -180,6 +181,6 @@ public class ConnectionManager {
 
         } else if (meshifyDevice != null) {
             Log.e(TAG, "wait to connect: " + meshifyDevice.getDevice().toString());
-         }
+        }
     }
 }
