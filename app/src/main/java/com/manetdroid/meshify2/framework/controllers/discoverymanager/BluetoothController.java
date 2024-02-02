@@ -171,7 +171,6 @@ public class BluetoothController extends AbstractController {
         Log.d(TAG, "discovering... ");
         if (this.bluetoothDiscovery != null) {
             this.bluetoothDiscovery.setDiscoveryRunning(true);
-            return;
         } else {
             this.bluetoothAdapter.cancelDiscovery();
             BluetoothDiscovery bluetoothDiscovery = new BluetoothDiscovery(context);

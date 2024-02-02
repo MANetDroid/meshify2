@@ -12,6 +12,7 @@ import android.provider.Telephony;
 
 import com.manetdroid.meshify2.api.Config;
 import com.manetdroid.meshify2.api.MeshifyUtils;
+import com.manetdroid.meshify2.api.Meshify;
 import com.manetdroid.meshify2.api.exceptions.MeshifyException;
 import com.manetdroid.meshify2.framework.controllers.sessionmanager.SessionManager;
 import com.manetdroid.meshify2.framework.exceptions.ConnectionException;
@@ -95,6 +96,7 @@ public class MeshifyReceiver extends BroadcastReceiver {
         intentFilter.addAction(Telephony.Sms.Intents.SMS_DELIVER_ACTION);
     }
 
+    @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public void registerReceiver(Context context) {
         if (!this.isRegistered) {
             context.registerReceiver(this, getIntentFilter());
@@ -190,7 +192,7 @@ public class MeshifyReceiver extends BroadcastReceiver {
     public void startAdvertising(Config.Antenna antenna) {
         switch (antenna) {
             case BLUETOOTH_LE: {
-//                this.bluetoothController.startAdvertising(Meshify.getInstance().getMeshifyClient().getUserUuid());
+                  this.bluetoothController.startAdvertising(Meshify.getInstance().getMeshifyClient().getUserUuid());
             }
         }
     }
