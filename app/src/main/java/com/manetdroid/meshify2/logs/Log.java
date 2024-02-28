@@ -1,17 +1,12 @@
 package com.manetdroid.meshify2.logs;
 
+
 import com.manetdroid.meshify2.api.Meshify;
 
 public class Log {
     public static void d(String str, String str2) {
         if (Meshify.debug) {
             android.util.Log.d(str, str2);
-        }
-    }
-
-    public static void e(String str, String str2, Throwable tr) {
-        if (Meshify.debug) {
-            android.util.Log.e(str, str2, tr);
         }
     }
 
@@ -39,4 +34,9 @@ public class Log {
         }
     }
 
+    public static void e(String str, String str2, Throwable th) {
+        if (Meshify.debug) {
+            android.util.Log.e(str, str2, th);
+        }
+    }
 }

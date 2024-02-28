@@ -96,6 +96,7 @@ public class MeshifyReceiver extends BroadcastReceiver {
         intentFilter.addAction(Telephony.Sms.Intents.SMS_DELIVER_ACTION);
     }
 
+
     @SuppressLint("UnspecifiedRegisterReceiverFlag")
     public void registerReceiver(Context context) {
         if (!this.isRegistered) {
