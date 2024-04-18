@@ -159,6 +159,7 @@ public class Meshify {
     }
 
     public static String sendMessage(@NonNull Message message) {
+        Log.i("F", "AAR--------------------------AAR");
         try {
             return Meshify.sendMessage(message, getInstance().getConfig().getConfigProfile());
         } catch (NullPointerException e) {
@@ -168,6 +169,7 @@ public class Meshify {
     }
 
     public static String sendMessage(@NonNull Message message, ConfigProfile configProfile) {
+        Log.i("F", "AAR--------------------------AAR");
         Meshify.isMessageNull(message);
         try {
             message.setSenderId(getInstance().getMeshifyClient().getUserUuid());
@@ -180,6 +182,7 @@ public class Meshify {
     }
 
     public static String sendBroadcastMessage(@NonNull Message message, ConfigProfile configProfile) {
+        Log.i("F", "AAR--------------------------AAR");
         Meshify.isMessageNull(message);
         message.setReceiverId(null);
         try {
