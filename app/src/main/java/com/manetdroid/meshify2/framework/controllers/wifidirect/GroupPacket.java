@@ -4,10 +4,10 @@ import android.app.Activity;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 public class GroupPacket implements Serializable {
-    private Object context;
-    Activity activity = (Activity) context;
+    private UUID meshifyWifiUUID;
     private String ip;
     private String mac;
     private int port;
@@ -17,6 +17,8 @@ public class GroupPacket implements Serializable {
     private String textMessage;
     private int type; // 0 - config, 1 - String message Host-Peer, 2 - Group device ports, 3 - String message Peer - Peer
     private int[] GroupDevicePortArray;
+    private String[] GroupDeviceNameArray;
+    private UUID[] GroupDeviceUUIDArray;
 
     public GroupPacket(String ip, String mac) {
         this.type = 0;
@@ -24,9 +26,10 @@ public class GroupPacket implements Serializable {
         this.mac = mac;
     }
 
-    public GroupPacket(String textMessage) {
+    public GroupPacket(UUID deviceId, String textMessage) {
         this.type = 1;
         this.textMessage = textMessage;
+        this.meshifyWifiUUID = deviceId;
     }
 
     public GroupPacket(byte[] message) {
@@ -34,11 +37,13 @@ public class GroupPacket implements Serializable {
         this.message = message;
     }
 
-    public GroupPacket(List<WifiDirectMeshifyDevice.MultiServerThread> threadArray, int myPort) {
+    public GroupPacket(List<MultiServerThread> threadArray, int myPort) {
         this.type = 2;
         int[] portArray = new int[threadArray.size() - 1];
+        UUID[] uuIDArray = new UUID[threadArray.size() - 1];
+        String[] nameArray = new String[threadArray.size() - 1];
         int i = 0;
-        for (WifiDirectMeshifyDevice.MultiServerThread m : threadArray) {
+        for (MultiServerThread m : threadArray) {
             if (m.getSocket().getPort() == myPort) {
                 continue;
             }
@@ -48,11 +53,16 @@ public class GroupPacket implements Serializable {
         this.GroupDevicePortArray = portArray;
     }
 
-    public GroupPacket(String textMessage, int groupPort, int originPort) {
+    public GroupPacket(UUID meshifyWifiUUID, String textMessage, int groupPort, int originPort) {
         this.type = 3;
         this.port = groupPort;
         this.originPort = originPort;
         this.textMessage = textMessage;
+        this.meshifyWifiUUID = meshifyWifiUUID;
+    }
+
+    public UUID getMeshifyWifiUUID() {
+        return meshifyWifiUUID;
     }
 
     public int getOriginPort() {
