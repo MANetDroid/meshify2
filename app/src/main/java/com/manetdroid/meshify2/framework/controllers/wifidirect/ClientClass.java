@@ -62,7 +62,7 @@ public class ClientClass extends Thread {
         try {
             Log.v("C", "Selected: " + selectedClientPort);
             if (selectedClientPort != 0) {
-                GroupPacket groupMultihopPacket = new GroupPacket(packet.getMeshifyWifiUUID(), packet.getTextMessage(), selectedClientPort, socket.getLocalPort());
+                GroupPacket groupMultihopPacket = new GroupPacket(packet.getMeshifyWifiUUID(), packet.getOriginDeviceUsername(), packet.getTextMessage(), selectedClientPort, socket.getLocalPort());
                 ObjectOutputStream os = new ObjectOutputStream(outputStream);
                 os.writeObject(groupMultihopPacket);
             } else {

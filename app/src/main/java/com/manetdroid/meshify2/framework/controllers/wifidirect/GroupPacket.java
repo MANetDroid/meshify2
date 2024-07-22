@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class GroupPacket implements Serializable {
     private UUID meshifyWifiUUID;
+    private String originDeviceUsername;
     private String ip;
     private String mac;
     private int port;
@@ -26,15 +27,17 @@ public class GroupPacket implements Serializable {
         this.mac = mac;
     }
 
-    public GroupPacket(UUID deviceId, String textMessage) {
+    public GroupPacket(UUID deviceId, String username, String textMessage) {
         this.type = 1;
         this.textMessage = textMessage;
         this.meshifyWifiUUID = deviceId;
+        this.originDeviceUsername = username;
     }
 
-    public GroupPacket(byte[] message) {
+    public GroupPacket(byte[] message, String username) {
         this.type = 1;
         this.message = message;
+        this.originDeviceUsername = username;
     }
 
     public GroupPacket(List<MultiServerThread> threadArray, int myPort) {
@@ -53,12 +56,21 @@ public class GroupPacket implements Serializable {
         this.GroupDevicePortArray = portArray;
     }
 
-    public GroupPacket(UUID meshifyWifiUUID, String textMessage, int groupPort, int originPort) {
+    public GroupPacket(UUID meshifyWifiUUID, String username, String textMessage, int groupPort, int originPort) {
         this.type = 3;
         this.port = groupPort;
         this.originPort = originPort;
         this.textMessage = textMessage;
         this.meshifyWifiUUID = meshifyWifiUUID;
+        this.originDeviceUsername = username;
+    }
+
+    public String getOriginDeviceUsername() {
+        return originDeviceUsername;
+    }
+
+    public void setOriginDeviceUsername(String originDeviceUsername) {
+        this.originDeviceUsername = originDeviceUsername;
     }
 
     public UUID getMeshifyWifiUUID() {

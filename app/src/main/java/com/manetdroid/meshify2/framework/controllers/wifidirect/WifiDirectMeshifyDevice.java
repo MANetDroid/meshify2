@@ -109,10 +109,10 @@ public class WifiDirectMeshifyDevice {
             @Override
             public void run() {
                 if (msg != null && isHost && serverClass != null) {
-                    GroupPacket g = new GroupPacket(meshifyWifiDirectUUID, msg);
+                    GroupPacket g = new GroupPacket(meshifyWifiDirectUUID, username, msg);
                     serverClass.write(g);
                 } else if (msg != null && !isHost && clientClass != null) {
-                    GroupPacket g = new GroupPacket(meshifyWifiDirectUUID, msg);
+                    GroupPacket g = new GroupPacket(meshifyWifiDirectUUID, username, msg);
                     clientClass.write(g);
                 } else {
                     Log.w("Error", String.valueOf(serverClass));
